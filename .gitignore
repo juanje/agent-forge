@@ -1,0 +1,13 @@
+.env
+*.swp
+*.swo
+*~
+
+__pycache__/
+*.pyc
+.venv/
+.python-version
+
+.DS_Store
+
+reviews/

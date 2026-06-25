@@ -1,0 +1,12 @@
+# permissions.json Template
+
+> Reference: `docs/principles/permissions-as-design.md`
+> Adjust paths to match your kb/ structure.
+
+Restrictive diagnostic archetype:
+- read: allow (deny .env, .ssh)
+- write: deny default; allow kb/active/, tmp/
+- bash: deny default; allow bin/*, scoped git
+- grep/find/ls: deny (forces index navigation)
+
+Pair every skill `allowed-tools` bash pattern with an allow entry here.

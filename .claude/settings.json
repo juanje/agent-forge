@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(**)",
+      "Write(reviews/**)",
+      "Bash(grep *)",
+      "Bash(find *)",
+      "Bash(wc *)",
+      "Bash(ls *)",
+      "Bash(tree *)",
+      "Bash(cp *)",
+      "Bash(chmod *)",
+      "Bash(mkdir *)"
+    ],
+    "deny": [
+      "Write(docs/**)",
+      "Write(templates/**)",
+      "Write(examples/**)",
+      "Write(.cursor/skills/**)",
+      "Write(.claude/skills/**)",
+      "Write(.claude/settings.json)",
+      "Write(CLAUDE.md)",
+      "Write(README.md)",
+      "Read(**/.env*)",
+      "Read(**/*.pem)",
+      "Read(**/*credentials*)",
+      "Read(**/*secret*)"
+    ]
+  }
+}

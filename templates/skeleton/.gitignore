@@ -1,0 +1,11 @@
+.env
+.pi/logs/
+.pi/npm/
+.pi/permissions.local.json
+tmp/
+__pycache__/
+.venv/
+*.pyc
+*.swp
+*.swo
+.python-version
