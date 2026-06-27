@@ -32,6 +32,7 @@ Ask these questions **before generating files**. Batch related questions; do not
 | 6 | What **harness**? (Pi, Claude Code, Cursor, or multiple) | .pi/ vs .cursor/skills placement |
 | 7 | Who is the **target user**? (individual, team, cross-team) | Permissions strictness |
 | 8 | Where should the agent repo be created? (path) | Output directory |
+| 9 | What are 2-3 **example phrases** a user would say to trigger each task? | Trigger table, skill "When to use" sections |
 
 Confirm answers with user before proceeding.
 
@@ -69,7 +70,11 @@ Reference: `examples/system-prompts/diagnostic-agent.md` or `memory-agent.md` as
 ### 5. Generate AGENTS.md
 
 - "Where to find things" from data sources (step 1 Q5) — every entry: what + when
-- Procedure trigger table from tasks (step 1 Q3)
+- Include `kb/index.md` as top-level KB hub (from skeleton template)
+- Navigation guidance: single subordinate line ("Read on demand... Read indexes first, then specific files") — not a dominant opening instruction
+- Never reference files that don't exist yet — every path in the map must be created during bootstrap
+- Do **not** include "Skills in `.pi/skills/`..." lines — Pi knows skill locations; LLMs interpret as ls target
+- Procedure trigger table from tasks (step 1 Q3) — use example phrases from Q9, not just capability names
 - Default approach
 - Post-task capture/commit if applicable
 
@@ -78,7 +83,11 @@ Reference: `templates/fragments/agents-md.md`
 ### 6. Generate permissions.json (WHY: permissions depend on the skills and KB paths defined in Steps 4-5 — generating them earlier would require rework)
 
 Start from `templates/skeleton/.pi/permissions.json`. Adjust:
-- `write.paths.allow` / `deny` for actual kb/ directory names
+- `ls`: allow by default with secret path deny — do **not** deny ls entirely
+- `read.paths.deny`: include `.git/*` alongside secrets
+- `write.paths.allow` / `edit.paths.allow`: expand for KB lifecycle (history index, lessons, known-issues, tmp/)
+- Remove blanket `kb/history/*` from write deny if present — allow index and closed-record writes
+- `bash.allow`: add scoped grep (`grep * tmp/*`, `grep * kb/*`); do **not** allow `sed` — prefer `edit` tool
 - `bash.allow` for git patterns skills will need
 - Pair with skill allowed-tools (even if only primary skill so far)
 
@@ -88,6 +97,9 @@ Reference: `docs/principles/permissions-as-design.md`
 
 For 1-2 highest-priority tasks from discovery:
 - Copy `templates/fragments/skill.md` structure
+- Include **Step 0: Parse input** with user phrase examples from Q9
+- Include **Tools available** table with preferred + fallback modes; explicit "do not --help"
+- No Architecture/Design/Context preamble before Steps — start with When to use, Tools, Step 0
 - Embed bin/ calls in numbered steps
 - Add disconfirmation gate if diagnostic
 - Define success criteria
@@ -102,8 +114,15 @@ For each external system (step 1 Q4):
 - Register in `tools/cli.py`
 - Update `.env.example` with required variables
 
+**PoC interface discipline:**
+- Minimal interface for Phase 1 — what the skill calls is the interface; avoid extra flags the skill won't use
+- Health checks: treat 401/403 as "up" (service reachable, auth may be missing in PoC)
+- Detect placeholder/unconfigured URLs and report clearly instead of failing opaquely
+- Auth tokens optional unless the endpoint requires them for the PoC scenario
+
 ### 9. Create KB structure
 
+- `kb/index.md` as top-level hub (from skeleton template)
 - `kb/<reference>/index.md` per data source category
 - `kb/active/index.md` (from skeleton)
 - Initial entries in reference index pointing to planned content (or stubs)
@@ -133,6 +152,11 @@ for f in bin/*; do "$f" --help > /dev/null 2>&1 || echo "FAIL: $f"; done
 
 If any tool fails `--help`, the import chain is broken — fix before reporting.
 
+**Structural checks:**
+- Verify every file path referenced in AGENTS.md exists on disk
+- Verify each `bin/<name>` wrapper's CLI name matches a key in `pyproject.toml` `[project.scripts]`
+- Verify `[build-system]` section exists in `pyproject.toml`
+
 ### 12. Report
 
 Summarize:
@@ -160,7 +184,7 @@ Summarize:
 
 ## Checklist
 
-- [ ] Discovery interview completed (8 questions)
+- [ ] Discovery interview completed (9 questions)
 - [ ] Harness and archetype decisions applied
 - [ ] Skeleton copied to target path
 - [ ] SYSTEM.md drafted and user-confirmed
