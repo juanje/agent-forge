@@ -3,10 +3,47 @@
 > Reference: `docs/principles/permissions-as-design.md`
 > Adjust paths to match your kb/ structure.
 
-Restrictive diagnostic archetype:
-- read: allow (deny .env, .ssh)
-- write: deny default; allow kb/active/, tmp/
-- bash: deny default; allow bin/*, scoped git
-- grep/find/ls: deny (forces index navigation)
+Restrictive diagnostic archetype with discovery tier:
+
+- **read:** allow (deny `.env*`, `~/.ssh/*`, `.git/*` — secrets and noise sources)
+- **write:** deny default; allow `kb/active/*`, `tmp/*`, KB lifecycle paths (see below)
+- **edit:** prefer over bash `sed` — OS-portable; use for observations, active records, index updates
+- **bash:** deny default; allow `bin/*`, scoped git, scoped grep (see below)
+- **grep tool:** deny — forces controlled search via bash patterns on working dirs only
+- **find:** deny
+- **ls:** allow by default (deny `.env*`, `~/.ssh/*`) — agents need navigation; full deny forces `read(index.md)` before the index exists
+
+## Scoped grep pattern
+
+Deny the native grep tool; allow bash grep on working directories only:
+
+```
+"grep * tmp/*"
+"grep * kb/*"
+```
+
+This prevents repo-wide grep (including `.git/` history) while letting skills search scratch and KB content.
+
+## Archive vs immutable
+
+History/archive stores: deny blanket writes to record files the agent should not mutate; allow index and lifecycle operations:
+
+- **allow write/edit:** `kb/history/index.md`, `kb/history/*.md` (new closed records), `kb/lessons/*`, `kb/reference/known-issues.md`
+- **deny write:** `kb/reference/*` (developer-maintained read-only store)
+- Do **not** use blanket `kb/history/*` in write deny — consolidate/close skills need cross-store writes
+
+## KB lifecycle paths
+
+Consolidate and close skills often write across stores in one procedure. Ensure permissions allow:
+
+- `kb/active/*` — open investigations
+- `kb/history/index.md`, `kb/history/*.md` — closed records and index updates
+- `kb/lessons/*` — distilled learnings
+- `kb/reference/known-issues.md` — agent-maintained known-issue store (if used)
+- `tmp/*` — scratch during procedures
+
+## Prefer edit over sed
+
+Do not allow `sed` in bash patterns. Use Pi's native `edit` tool for in-place file updates — `sed -i` differs between macOS and Linux.
 
 Pair every skill `allowed-tools` bash pattern with an allow entry here.

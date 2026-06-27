@@ -5,17 +5,48 @@ description: {{PRIMARY_SKILL_DESCRIPTION}} Trigger when {{PRIMARY_SKILL_TRIGGER}
 
 # {{PRIMARY_SKILL_TITLE}}
 
-## Trigger
+## When to use
 
-{{PRIMARY_SKILL_TRIGGER_DETAIL}}
+- "{{EXAMPLE_PHRASE_1}}", "{{EXAMPLE_PHRASE_2}}"
+- {{TRIGGER_KEYWORDS}}
+
+## Tools available
+
+| Command | What it does | Key options |
+|---------|-------------|-------------|
+| `bin/{{TOOL_1}}` | {{DESCRIPTION}} | {{PREFERRED_OPTION}} (preferred); {{FALLBACK_OPTION}} (fallback) |
+
+Do not run `--help`, `ls bin/`, or read tool source — use this table directly.
 
 ## Steps
 
-1. {{STEP_1}}
-2. {{STEP_2}}
-3. {{STEP_3}}
-4. If tool fails, treat error as diagnostic evidence; do not improvise curl/python workarounds
-5. Report findings with evidence chain and confidence level
+### Step 0: Parse input
+
+Extract {{INPUT_FIELD}} from the user's message:
+
+| User says | Action |
+|-----------|--------|
+| {{EXAMPLE}} | {{EXTRACTION}} |
+
+### Step 1: {{FIRST_ACTION}}
+
+{{STEP_1_DETAIL}}
+
+### Step 2: {{SECOND_ACTION}}
+
+{{STEP_2_DETAIL}}
+
+### Step 3: {{THIRD_ACTION}}
+
+{{STEP_3_DETAIL}}
+
+### Step 4: Handle tool failures
+
+If a tool fails, treat the error as diagnostic evidence. Do not improvise curl/python workarounds.
+
+### Step 5: Report findings
+
+Report with evidence chain and confidence level.
 
 ## Success criteria
 

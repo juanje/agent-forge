@@ -4,18 +4,35 @@
     "tools": {
       "read": {
         "default": "allow",
-        "paths": { "deny": [".env*", "~/.ssh/*"] }
+        "paths": { "deny": [".env*", "~/.ssh/*", ".git/*"] }
       },
       "write": {
         "default": "deny",
         "paths": {
-          "allow": ["kb/active/*", "tmp/*"],
-          "deny": ["kb/reference/*", "kb/history/*", "tools/*", "bin/*", ".env*"]
+          "allow": [
+            "kb/active/*",
+            "kb/history/index.md",
+            "kb/history/*.md",
+            "kb/lessons/*",
+            "kb/reference/known-issues.md",
+            "tmp/*"
+          ],
+          "deny": ["kb/reference/*", "tools/*", "bin/*", ".env*"]
         }
       },
       "edit": {
         "default": "deny",
-        "paths": { "allow": ["kb/observations.md"], "deny": [".env*"] }
+        "paths": {
+          "allow": [
+            "kb/observations.md",
+            "kb/active/*",
+            "kb/history/index.md",
+            "kb/lessons/*",
+            "kb/reference/known-issues.md",
+            "tmp/*"
+          ],
+          "deny": [".env*"]
+        }
       },
       "bash": {
         "default": "deny",
@@ -25,13 +42,18 @@
         ],
         "allow": [
           "bin/*",
+          "grep * tmp/*",
+          "grep * kb/*",
           "git status*", "git log*", "git add *", "git commit*",
           "git mv kb/active/* kb/history/*"
         ]
       },
       "grep": "deny",
       "find": "deny",
-      "ls": "deny"
+      "ls": {
+        "default": "allow",
+        "paths": { "deny": [".env*", "~/.ssh/*"] }
+      }
     }
   }
 }
