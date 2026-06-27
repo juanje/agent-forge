@@ -34,6 +34,14 @@ Every skill needs three components: a **trigger** that tells the agent when to i
 
 13. **Completion checklist for complex skills** — Skills with 5+ steps add a checklist section at the end: a compressed mirror of all steps as checkbox items. Models exhibit recency bias — a short checklist after many lines of procedure re-activates step awareness before the agent reports. Not needed for skills under 5 steps.
 
+14. **Step 0: Parse input** — Every skill starts with explicit input extraction from the user message. Without it, LLMs drift into orientation behavior (exploring tools, KB, or repo structure before acting).
+
+15. **Inline tool signatures** — Tool table with preferred/fallback modes prevents `--help` discovery loops. Include explicit negatives ("do not ls bin/, do not read source"). Tool syntax belongs here and in steps, not in a global inventory.
+
+16. **No informational preamble** — Text before Step 0 becomes an "understand before act" prompt. No Architecture, Design, or Context sections before Steps. All pre-step content must be actionable reference (When to use, Tools available).
+
+17. **Read timing for multi-phase** — Defer KB reads to synthesis phase in long-running skills. Explicit "do not read during [phase]" prevents premature exploration that pollutes context.
+
 ## Evaluation Criteria
 
 - [ ] Description with clear trigger phrases (routing signal)
@@ -49,6 +57,10 @@ Every skill needs three components: a **trigger** that tells the agent when to i
 - [ ] Skill-permission parity verified
 - [ ] Skills with 5+ steps: completion checklist at end (compressed step mirror)
 - [ ] Gotchas section for domain-specific pitfalls (tool restrictions, endpoint naming, format traps)
+- [ ] Step 0: Parse input present (user message → extracted parameters)
+- [ ] Tool signature table inline with preferred + fallback modes
+- [ ] No Architecture/Design sections before Steps
+- [ ] Multi-phase skills: KB read timing specified
 
 ## Good Examples
 

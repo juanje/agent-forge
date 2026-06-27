@@ -26,6 +26,10 @@ Target ratio: **~80% character, ~20% hard limits**. If Limits outgrows Character
 
 8. **Placement rule** — If removing it changes the agent's **first response to a novel question** → system prompt / identity. If it says **where to look** or **what sequence** → operations guide.
 
+9. **Operational discipline traits** — Every agent needs traits about tool interaction (Tool-trusting, Direct), not just domain expertise. These explain WHY discovery shortcuts and script-based file generation fail — character inference space for novel situations.
+
+10. **Procedure boundary limit** — Standard limit: stay within skill procedure during execution; no git history exploration, tool source reading, or repo-wide grep for data tools already provide. Tangential exploration pollutes context.
+
 ## Evaluation Criteria
 
 - [ ] Identity paragraph states what the agent IS, DOES, and IS NOT (one paragraph)
@@ -40,6 +44,8 @@ Target ratio: **~80% character, ~20% hard limits**. If Limits outgrows Character
 - [ ] No operational navigation (KB maps, trigger tables) in identity
 - [ ] No tool syntax or global tool inventory in identity
 - [ ] Traits use domain language (not generic assistant phrasing)
+- [ ] Operational discipline traits present (Tool-trusting, Direct)
+- [ ] Procedure boundary limit: no git history, tool source, or repo-wide grep during procedures
 
 ## Good Examples
 

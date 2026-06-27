@@ -30,6 +30,16 @@ Different harnesses implement permissions differently (config files, settings UI
 
 10. **Audit trail** — Log permission decisions (allow/deny with tool, input, reason) for compliance and debugging.
 
+11. **Discovery tier** — `ls` should default to allow (with secret path deny). Full deny forces `read(index.md)` navigation, which fails when the index doesn't exist yet during bootstrap.
+
+12. **Scoped grep pattern** — Deny the native grep tool; allow `bash: grep * tmp/*` and `grep * kb/*` for controlled search in working directories. Prevents repo-wide grep including `.git/` history.
+
+13. **Noise source deny** — Add `.git/*` to read deny alongside secrets. Git history is a noise source that invites tangential exploration, not just a security concern.
+
+14. **Archive index exception** — History/archive directories: deny blanket writes to immutable records, but allow index updates and new closed-record writes (`kb/history/index.md`, `kb/history/*.md`).
+
+15. **Prefer native edit over bash sed** — `edit` tool is OS-portable; `sed -i` differs between macOS and Linux. Do not allow `sed` in bash patterns when `edit` covers the use case.
+
 ## Agent Archetypes
 
 | Aspect | Diagnostic (restrictive) | Productivity (permissive) |
@@ -52,6 +62,11 @@ Choose the archetype that matches your agent's failure cost. Diagnostic agents w
 - [ ] Tool/wrapper source in write deny
 - [ ] Skill-permission parity verified
 - [ ] Harness-appropriate implementation (config file, settings, rules, hooks — depends on runtime)
+- [ ] `ls` allow by default with secret path deny (or documented rationale for full deny)
+- [ ] Native grep denied; scoped bash grep allowed on working dirs if search needed
+- [ ] `.git/*` in read deny
+- [ ] Archive/history: index writable, immutable records protected
+- [ ] No `sed` in bash allow when edit tool covers in-place updates
 
 ## Good Examples
 
